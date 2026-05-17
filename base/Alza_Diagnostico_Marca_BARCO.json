@@ -1,0 +1,91 @@
+{
+  "nombre_cliente": "Facundo Collosa",
+  "empresa_cliente": "Alza Construcciones",
+  "bloques": [
+    {
+      "orden": 1,
+      "titulo": "Datos de referencia y contexto de la entrevista",
+      "descripcion": "Información operativa básica para encuadrar el diagnóstico.",
+      "preguntas": [
+        {
+          "orden": 1,
+          "texto": "¿Quién o quiénes responden este cuestionario? ¿Cuál es su rol dentro de Alza?",
+          "tipo": "texto_largo",
+          "obligatoria": true
+        },
+        {
+          "orden": 2,
+          "texto": "¿Cómo está estructurado organizacionalmente el equipo?",
+          "tipo": "seleccion_unica",
+          "opciones": ["Menos de 10 personas", "Entre 10 y 50 personas", "Más de 50 personas"],
+          "obligatoria": true
+        },
+        {
+          "orden": 3,
+          "texto": "Por favor, adjunta el organigrama actual de la empresa si lo tienes a mano.",
+          "tipo": "archivo",
+          "obligatoria": false
+        }
+      ]
+    },
+    {
+      "orden": 2,
+      "titulo": "Historia y origen",
+      "descripcion": "Entender la narrativa fundacional, los hitos y cómo la empresa llegó a ser lo que es.",
+      "preguntas": [
+        {
+          "orden": 1,
+          "texto": "¿Cómo surgió Alza? ¿Cuál fue el problema o la oportunidad que llevó a sus fundadores a crear la empresa en 2015?",
+          "tipo": "texto_largo",
+          "obligatoria": true
+        },
+        {
+          "orden": 2,
+          "texto": "¿Qué hitos consideras más importantes en la historia de la empresa?",
+          "tipo": "seleccion_multiple",
+          "opciones": ["El primer gran cliente corporativo", "La expansión a nuevas provincias", "La formación de un equipo interno de diseño", "La certificación de calidad/sustentabilidad"],
+          "obligatoria": true
+        }
+      ]
+    },
+    {
+      "orden": 3,
+      "titulo": "Identidad de marca actual",
+      "descripcion": "Cómo se perciben, qué creen que proyectan y qué distancias existen entre identidad y percepción real.",
+      "preguntas": [
+        {
+          "orden": 1,
+          "texto": "Si tuviesen que definir Alza en tres palabras —no lo que hacen, sino quiénes son— ¿qué tres palabras elegirían?",
+          "tipo": "texto_largo",
+          "obligatoria": true
+        },
+        {
+          "orden": 2,
+          "texto": "¿Tienen un perfil más asociado al diseño/creatividad o a la ejecución/ingeniería?",
+          "tipo": "seleccion_unica",
+          "opciones": ["100% Diseño y Creatividad", "Equilibrado entre Diseño y Ejecución", "100% Ejecución e Ingeniería", "Nos adaptamos según el cliente"],
+          "obligatoria": true
+        }
+      ]
+    },
+    {
+      "orden": 4,
+      "titulo": "Propuesta de valor y diferenciación",
+      "descripcion": "Qué ofrecen realmente, qué los diferencia y qué promesa sostiene el negocio.",
+      "preguntas": [
+        {
+          "orden": 1,
+          "texto": "¿Qué problemas concretos resuelven a sus clientes que van más allá del «construir bien»?",
+          "tipo": "texto_largo",
+          "obligatoria": true
+        },
+        {
+          "orden": 2,
+          "texto": "Sube algún brochure o presentación comercial que utilicen actualmente para vender.",
+          "tipo": "archivo",
+          "obligatoria": false
+        }
+      ]
+    }
+  ]
+}
