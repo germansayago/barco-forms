@@ -1,5 +1,5 @@
 import { notFound } from 'next/navigation'
-import { createClient } from '@/lib/supabase/server'
+import { createClient, signFormFileUrls } from '@/lib/supabase/server'
 import RespuestasViewer from '@/components/admin/RespuestasViewer'
 
 export default async function RespuestasPage({
@@ -46,9 +46,12 @@ export default async function RespuestasPage({
     })
   }
 
+  // Sign private storage URLs
+  const formularioSigned = await signFormFileUrls(formulario)
+
   return (
     <div className="max-w-4xl mx-auto pb-24 space-y-6">
-      <RespuestasViewer form={formulario} />
+      <RespuestasViewer form={formularioSigned} />
     </div>
   )
 }

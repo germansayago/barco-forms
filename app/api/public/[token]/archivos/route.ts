@@ -24,14 +24,18 @@ export async function POST(
     const path = `${token}/${pregunta_id}/${timestamp}_${cleanFileName}`;
 
     const { error: uploadError } = await supabase.storage
-      .from('archivos')
+      .from('formularios-archivos')
       .upload(path, buffer, { contentType: file.type, cacheControl: '3600', upsert: true });
 
     if (uploadError) return NextResponse.json({ error: uploadError.message }, { status: 500 });
 
-    const { data: { publicUrl } } = supabase.storage.from('archivos').getPublicUrl(path);
+    const { data: signedData, error: signedError } = await supabase.storage
+      .from('formularios-archivos')
+      .createSignedUrl(path, 3600);
 
-    return NextResponse.json({ success: true, url: publicUrl, filename: file.name, path })
+    if (signedError) return NextResponse.json({ error: signedError.message }, { status: 500 });
+
+    return NextResponse.json({ success: true, url: signedData?.signedUrl, filename: file.name, path })
   } catch (err: any) {
     return NextResponse.json({ error: 'Error interno del servidor' }, { status: 500 })
   }
@@ -48,7 +52,7 @@ export async function DELETE(
     const { path } = await request.json();
     if (!path) return NextResponse.json({ error: 'Path requerido' }, { status: 400 });
 
-    const { error } = await supabase.storage.from('archivos').remove([path]);
+    const { error } = await supabase.storage.from('formularios-archivos').remove([path]);
     if (error) return NextResponse.json({ error: error.message }, { status: 500 });
 
     return NextResponse.json({ success: true });

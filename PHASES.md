@@ -198,8 +198,8 @@ Cada fase es una unidad de trabajo que se implementa y valida antes de avanzar a
 - [x] Intentar acceso a `/admin/formularios` sin sesión → debe redirigir (Manejado por auth)
 - [x] POST a `/api/public/[token]/enviar` con token `completado` → debe retornar 403
 - [x] Upload de `.exe` → debe retornar error
-- [ ] GET a `/api/ai/generar` sin sesión → debe retornar 401
-- [ ] Verificar que archivos en Storage no son accesibles por URL directa
+- [x] GET a `/api/ai/generar` sin sesión → debe retornar 401
+- [x] Verificar que archivos en Storage no son accesibles por URL directa
 
 #### Deploy
 - [ ] Configurar proyecto en Vercel con todas las variables de entorno
@@ -222,4 +222,4 @@ Cada fase es una unidad de trabajo que se implementa y valida antes de avanzar a
 | 4 — Generación con IA | Completado |
 | 5 — Formulario público + auto-save | Completado |
 | 6 — Envío + notificaciones + PDF | Completado |
-| 7 — QA + producción | Pendiente |
+| 7 — QA + producción | Completado (Listo para Deploy Vercel) |
