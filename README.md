@@ -1,36 +1,56 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# BarcoForms
 
-## Getting Started
+Plataforma de diagnóstico de marca para BARCO Estrategia de Marca. Permite crear formularios de diagnóstico personalizados, enviarlos a clientes, recopilar respuestas con auto-save y exportar todo en PDF.
 
-First, run the development server:
+## Stack
+
+- **Framework:** Next.js 16 (App Router)
+- **UI:** shadcn/ui + Tailwind CSS + Framer Motion
+- **Base de datos:** Supabase (PostgreSQL + Storage)
+- **Auth:** Supabase Auth
+- **IA:** Anthropic Claude (claude-sonnet-4-6)
+- **Email:** Resend
+- **PDF:** @react-pdf/renderer
+- **Drag & drop:** @dnd-kit
+- **Hosting:** Vercel
+
+## Funcionalidades
+
+- **Panel admin** — CRUD de formularios con editor drag & drop de bloques y preguntas
+- **Generación con IA** — Claude genera el cuestionario completo a partir del contexto del cliente (rubro, tamaño, objetivo), con control sobre cantidad de secciones y preguntas
+- **Formulario público** — Acceso por token único, auto-save con retry, soporte de archivos adjuntos hasta 10MB
+- **Notificaciones** — Email a BARCO vía Resend cuando un cliente completa el formulario
+- **Exportación PDF** — Reporte completo con todas las respuestas organizado por bloques
+- **MCP Server** — Permite crear formularios desde Claude Desktop u otros agentes MCP
+
+## Variables de entorno
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+NEXT_PUBLIC_SUPABASE_URL=
+NEXT_PUBLIC_SUPABASE_ANON_KEY=
+SUPABASE_SERVICE_ROLE_KEY=
+ANTHROPIC_API_KEY=
+RESEND_API_KEY=
+RESEND_FROM_EMAIL=
+BARCO_NOTIFICATION_EMAIL=
+NEXT_PUBLIC_APP_URL=
+MCP_API_KEY=
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Desarrollo local
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+npm install
+npm run dev
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## MCP Server
 
-## Learn More
+Permite que Claude (u otro agente MCP) cree formularios directamente desde una conversación:
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+cd mcp-server
+npm install
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Configuración en `mcp-server/claude_desktop_config.json`.
