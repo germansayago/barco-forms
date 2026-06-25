@@ -109,3 +109,7 @@ Adaptá la profundidad, el foco y el lenguaje de las preguntas al contexto espec
     return new Response(error.message, { status: 500 });
   }
 }
+
+export async function GET() {
+  return new Response('No autorizado', { status: 401 });
+}

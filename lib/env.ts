@@ -18,6 +18,9 @@ const envSchema = z.object({
 
   // App
   NEXT_PUBLIC_APP_URL: z.string().url(),
+
+  // MCP
+  MCP_API_KEY: z.string().min(1),
 })
 
 // Se valida en runtime solo en el servidor. En el cliente solo están disponibles las NEXT_PUBLIC_*.

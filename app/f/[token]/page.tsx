@@ -1,5 +1,6 @@
 import { notFound } from 'next/navigation'
 import { createClient } from '@supabase/supabase-js'
+import { signFormFileUrls } from '@/lib/supabase/server'
 import FormularioPublico from '@/components/public/FormularioPublico'
 
 export default async function PublicFormPage({ params }: { params: Promise<{ token: string }> }) {
@@ -81,10 +82,13 @@ export default async function PublicFormPage({ params }: { params: Promise<{ tok
     })
   }
 
+  // Sign private storage URLs
+  const formSigned = await signFormFileUrls(form)
+
   return (
     <div className="min-h-screen bg-white py-12 px-4 sm:px-6 lg:px-8 font-sans selection:bg-black selection:text-white">
       <div className="max-w-6xl mx-auto">
-        <FormularioPublico form={form} />
+        <FormularioPublico form={formSigned} />
       </div>
     </div>
   )

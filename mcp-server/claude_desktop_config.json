@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "barcoforms": {
+      "command": "npx",
+      "args": ["tsx", "/Users/germansayago/Projects/SideProjects/BarcoForms/mcp-server/index.ts"],
+      "env": {
+        "BARCOFORMS_URL": "http://localhost:3000",
+        "MCP_API_KEY": "barco-mcp-local-dev"
+      }
+    }
+  }
+}
