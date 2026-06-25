@@ -34,6 +34,8 @@ export function AIGeneratorModal({ nombreCliente, empresaCliente, onGenerate }: 
   const [tipoServicio, setTipoServicio] = useState('')
   const [objetivoDiagnostico, setObjetivoDiagnostico] = useState('')
   const [notasAdicionales, setNotasAdicionales] = useState('')
+  const [cantidadBloques, setCantidadBloques] = useState('5')
+  const [preguntasPorBloque, setPreguntasPorBloque] = useState('5')
 
   const handleGenerate = async () => {
     setIsGenerating(true)
@@ -52,6 +54,8 @@ export function AIGeneratorModal({ nombreCliente, empresaCliente, onGenerate }: 
           tipo_servicio: tipoServicio,
           objetivo_diagnostico: objetivoDiagnostico,
           notas_adicionales: notasAdicionales,
+          cantidad_bloques: parseInt(cantidadBloques) || 5,
+          preguntas_por_bloque: parseInt(preguntasPorBloque) || 5,
         }),
       })
 
@@ -75,7 +79,8 @@ export function AIGeneratorModal({ nombreCliente, empresaCliente, onGenerate }: 
       }
 
       try {
-        const parsed = JSON.parse(accumulated)
+        const clean = accumulated.replace(/^```(?:json)?\s*/i, '').replace(/\s*```$/, '').trim()
+        const parsed = JSON.parse(clean)
         if (!parsed.bloques || !Array.isArray(parsed.bloques)) {
           throw new Error('Formato JSON inválido')
         }
@@ -113,7 +118,7 @@ export function AIGeneratorModal({ nombreCliente, empresaCliente, onGenerate }: 
         Generar con IA
       </Button>
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+        <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>Generar cuestionario con IA</DialogTitle>
           <DialogDescription>
@@ -187,12 +192,41 @@ export function AIGeneratorModal({ nombreCliente, empresaCliente, onGenerate }: 
 
             <div className="space-y-2">
               <Label htmlFor="notas">Notas adicionales</Label>
-              <Textarea 
-                id="notas" 
-                placeholder="Cualquier otro detalle relevante para Claude..." 
-                value={notasAdicionales} 
-                onChange={e => setNotasAdicionales(e.target.value)} 
+              <Textarea
+                id="notas"
+                placeholder="Cualquier otro detalle relevante para Claude..."
+                value={notasAdicionales}
+                onChange={e => setNotasAdicionales(e.target.value)}
               />
+            </div>
+
+            <div className="grid grid-cols-2 gap-4 pt-2 border-t border-gray-100">
+              <div className="space-y-2">
+                <Label htmlFor="bloques">Cantidad de secciones</Label>
+                <select
+                  id="bloques"
+                  className="flex h-9 w-full rounded-md border border-gray-200 bg-white px-3 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  value={cantidadBloques}
+                  onChange={e => setCantidadBloques(e.target.value)}
+                >
+                  {[3, 4, 5, 6, 7, 8, 10].map(n => (
+                    <option key={n} value={n}>{n} secciones</option>
+                  ))}
+                </select>
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="preguntas">Preguntas por sección</Label>
+                <select
+                  id="preguntas"
+                  className="flex h-9 w-full rounded-md border border-gray-200 bg-white px-3 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  value={preguntasPorBloque}
+                  onChange={e => setPreguntasPorBloque(e.target.value)}
+                >
+                  {[3, 4, 5, 6, 7, 8].map(n => (
+                    <option key={n} value={n}>{n} preguntas</option>
+                  ))}
+                </select>
+              </div>
             </div>
 
             {error && (
