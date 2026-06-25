@@ -25,33 +25,39 @@ export function PreguntaPublica({ pregunta, formularioId, respuestaInicial, onUp
   const saveToSupabase = async (payload: any) => {
     setIsSaving(true)
     setIsSaved(false)
-    if (onUpdate) onUpdate(pregunta.id, false, 'saving') 
-    try {
-      const res = await fetch(`/api/public/${formularioId}/respuestas`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          pregunta_id: pregunta.id,
-          ...payload
+    if (onUpdate) onUpdate(pregunta.id, false, 'saving')
+
+    const MAX_ATTEMPTS = 3
+    let lastError: unknown
+    for (let attempt = 1; attempt <= MAX_ATTEMPTS; attempt++) {
+      try {
+        const res = await fetch(`/api/public/${formularioId}/respuestas`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ pregunta_id: pregunta.id, ...payload }),
         })
-      })
-      if (!res.ok) throw new Error('Error saving')
-      setIsSaved(true)
-      
-      let hasAnswer = false
-      if (pregunta.tipo === 'texto_largo' && payload.valor_texto?.trim()) hasAnswer = true
-      if ((pregunta.tipo === 'seleccion_unica' || pregunta.tipo === 'seleccion_multiple') && payload.valor_opciones?.length > 0) hasAnswer = true
-      if (pregunta.tipo === 'archivo' && payload.archivos?.length > 0) hasAnswer = true
-      
-      if (onUpdate) onUpdate(pregunta.id, hasAnswer, 'saved', payload)
-      
-      setTimeout(() => setIsSaved(false), 2000)
-    } catch (err) {
-      console.error(err)
-      if (onUpdate) onUpdate(pregunta.id, false, 'saved') // Revert to empty state on error or similar
-    } finally {
-      setIsSaving(false)
+        if (!res.ok) throw new Error(`HTTP ${res.status}`)
+
+        setIsSaved(true)
+        let hasAnswer = false
+        if (pregunta.tipo === 'texto_largo' && payload.valor_texto?.trim()) hasAnswer = true
+        if ((pregunta.tipo === 'seleccion_unica' || pregunta.tipo === 'seleccion_multiple') && payload.valor_opciones?.length > 0) hasAnswer = true
+        if (pregunta.tipo === 'archivo' && payload.archivos?.length > 0) hasAnswer = true
+        if (onUpdate) onUpdate(pregunta.id, hasAnswer, 'saved', payload)
+        setTimeout(() => setIsSaved(false), 2000)
+        setIsSaving(false)
+        return
+      } catch (err) {
+        lastError = err
+        if (attempt < MAX_ATTEMPTS) {
+          await new Promise((resolve) => setTimeout(resolve, 500 * 2 ** (attempt - 1)))
+        }
+      }
     }
+
+    console.error('Auto-save falló tras 3 intentos:', lastError)
+    if (onUpdate) onUpdate(pregunta.id, false, 'saved')
+    setIsSaving(false)
   }
 
   // Handle texto_largo
